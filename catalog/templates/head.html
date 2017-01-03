@@ -42,26 +42,13 @@
                             <li><a href="#">Logout</a></li>
                         </ul>
                     </div>
-                        
+
             </nav>
             </div>
 
-            <div class="col-sm-12">
-                <h1 class="title">Meals catalog</h1>
-                <hr>
-            </div>
-
-        </header>
-
         <body>
-            <div class="col-sm-12">
-                <ol>
-                    <li>Macaroni Cheese</li>
-                    <li>Beef hotpot</li>
-                    <li>Roast Chicken</li>
-                    <li>Steak and Kidney Pie</li>
-                </ol>
-            </div>
+            {% block content %}
+            {% endblock %}
         </body>
 
     </section>
