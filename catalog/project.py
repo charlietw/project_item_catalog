@@ -194,39 +194,39 @@ def gdisconnect():
       response.headers['Content-Type'] = 'application/json'
       return response
 
-#JSON APIs to view Restaurant Information
-@app.route('/restaurant/<int:restaurant_id>/menu/JSON')
-def restaurantMenuJSON(restaurant_id):
-    restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
-    items = session.query(MenuItem).filter_by(restaurant_id = restaurant_id).all()
-    return jsonify(MenuItems=[i.serialize for i in items])
+# #JSON APIs to view Restaurant Information
+# @app.route('/restaurant/<int:restaurant_id>/menu/JSON')
+# def restaurantMenuJSON(restaurant_id):
+#     restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
+#     items = session.query(MenuItem).filter_by(restaurant_id = restaurant_id).all()
+#     return jsonify(MenuItems=[i.serialize for i in items])
 
 
-@app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/JSON')
-def menuItemJSON(restaurant_id, menu_id):
-    Menu_Item = session.query(MenuItem).filter_by(id = menu_id).one()
-    return jsonify(Menu_Item = Menu_Item.serialize)
+# @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/JSON')
+# def menuItemJSON(restaurant_id, menu_id):
+#     Menu_Item = session.query(MenuItem).filter_by(id = menu_id).one()
+#     return jsonify(Menu_Item = Menu_Item.serialize)
 
-@app.route('/restaurant/JSON')
-def restaurantsJSON():
-    restaurants = session.query(Restaurant).all()
-    return jsonify(restaurants= [r.serialize for r in restaurants])
-
-
-# #Show all restaurants
-# @app.route('/')
-# @app.route('/restaurant/')
-# def showRestaurants():
-#   restaurants = session.query(Restaurant).order_by(asc(Restaurant.name))
-#   print login_session
-#   if 'username' not in login_session:
-#     return render_template('restaurants.html', restaurants = restaurants)
-#   return render_template('publicrestaurants.html', restaurants = restaurants)
+# @app.route('/restaurant/JSON')
+# def restaurantsJSON():
+#     restaurants = session.query(Restaurant).all()
+#     return jsonify(restaurants= [r.serialize for r in restaurants])
 
 
-# #Create a new restaurant
-# @app.route('/restaurant/new/', methods=['GET','POST'])
-# def newRestaurant():
+# Home
+@app.route('/')
+@app.route('/home/')
+def showMeals():
+  meals = session.query(Meal).order_by(asc(Meal.name))
+  print login_session
+  # if 'username' not in login_session:
+  return render_template('home.html', meals = meals)
+  # return render_template('publicrestaurants.html', restaurants = restaurants)
+
+
+# #Create a new supplier
+# @app.route('/supplier/new/', methods=['GET','POST'])
+# def newSupplier():
 #   if 'username' not in login_session:
 #     return redirect ('/login')
 #   if request.method == 'POST':

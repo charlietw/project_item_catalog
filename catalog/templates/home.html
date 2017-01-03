@@ -1,0 +1,19 @@
+{% extends "head.html" %}
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <h1>Meals</h1>
+        <ul>
+            <li>Beef Hotpot</li>
+            <li>Chiken Chasseur</li>
+            {% for meal in meals %}
+                <li>{{meal.name}}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div id="result"></div>
+
+{% endblock %}
