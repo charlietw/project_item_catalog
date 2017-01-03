@@ -99,7 +99,7 @@ def gconnect():
         return response
 
     # Store the access token in the session for later use.
-    login_session['credentials'] = credentials
+    login_session['credentials'] = credentials.access_token
     login_session['gplus_id'] = gplus_id
 
     # Get user info
@@ -225,18 +225,18 @@ def showMeals():
 
 
 # #Create a new supplier
-# @app.route('/supplier/new/', methods=['GET','POST'])
-# def newSupplier():
-#   if 'username' not in login_session:
-#     return redirect ('/login')
-#   if request.method == 'POST':
-#       newRestaurant = Restaurant(name = request.form['name'], user_id=login_session['user_id'])
-#       session.add(newRestaurant)
-#       flash('New Restaurant %s Successfully Created' % newRestaurant.name)
-#       session.commit()
-#       return redirect(url_for('showRestaurants'))
-#   else:
-#       return render_template('newRestaurant.html')
+@app.route('/supplier/new/', methods=['GET','POST'])
+def newSupplier():
+  if 'username' not in login_session:
+    return redirect ('/login')
+  if request.method == 'POST':
+      newSupplier = Supplier(name = request.form['name'], user_id=login_session['user_id'])
+      session.add(newSupplier)
+      flash('New Supplier %s Successfully Created' % newSupplier.name)
+      session.commit()
+      return redirect(url_for('showMeals'))
+  else:
+      return render_template('newSupplier.html')
 
 # #Edit a restaurant
 # @app.route('/restaurant/<int:restaurant_id>/edit/', methods = ['GET', 'POST'])
