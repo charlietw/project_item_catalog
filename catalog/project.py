@@ -164,7 +164,7 @@ def getUserID(email):
 def gdisconnect():
     if 'username' not in login_session:
       print "Not logged in."
-      return redirect(url_for('showMeals'))
+      return redirect(url_for('home'))
     credentials = login_session['credentials']
     access_token = credentials
     print 'In gdisconnect access token is %s', access_token
@@ -192,7 +192,7 @@ def gdisconnect():
       response.headers['Content-Type'] = 'application/json'
       print response
       flash("Successfully logged out.")
-      return redirect(url_for('showMeals'))
+      return redirect(url_for('home'))
     else:
 
       response = make_response(json.dumps('Failed to revoke token for given user.', 400))
@@ -221,11 +221,11 @@ def gdisconnect():
 # Home
 @app.route('/')
 @app.route('/home/')
-def showMeals():
-  meals = session.query(Meal).order_by(asc(Meal.name))
+def home():
+  suppliers = session.query(Supplier).order_by(asc(Supplier.name))
   print login_session
   # if 'username' not in login_session:
-  return render_template('home.html', meals = meals)
+  return render_template('home.html', suppliers = suppliers)
   # return render_template('publicrestaurants.html', restaurants = restaurants)
 
 
@@ -237,23 +237,23 @@ def newSupplier():
   if request.method == 'POST':
       newSupplier = Supplier(name = request.form['name'], user_id=login_session['user_id'])
       session.add(newSupplier)
-      flash('New Supplier %s Successfully Created' % newSupplier.name)
+      flash('New Supplier %s successfully created' % newSupplier.name)
       session.commit()
-      return redirect(url_for('showMeals'))
+      return redirect(url_for('home'))
   else:
       return render_template('newSupplier.html')
 
-# #Edit a restaurant
-# @app.route('/restaurant/<int:restaurant_id>/edit/', methods = ['GET', 'POST'])
-# def editRestaurant(restaurant_id):
-#   editedRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
-#   if request.method == 'POST':
-#       if request.form['name']:
-#         editedRestaurant.name = request.form['name']
-#         flash('Restaurant Successfully Edited %s' % editedRestaurant.name)
-#         return redirect(url_for('showRestaurants'))
-#   else:
-#     return render_template('editRestaurant.html', restaurant = editedRestaurant)
+#Edit a supplier
+@app.route('/supplier/<int:supplier_id>/edit/', methods = ['GET', 'POST'])
+def editSupplier(supplier_id):
+  editedSupplier = session.query(Supplier).filter_by(id = supplier_id).one()
+  if request.method == 'POST':
+      if request.form['name']:
+        editedSupplier.name = request.form['name']
+        flash('Supplier name successfully changed to %s' % editedSupplier.name)
+        return redirect(url_for('home'))
+  else:
+    return render_template('editSupplier.html', supplier = editedSupplier)
 
 
 # #Delete a restaurant
