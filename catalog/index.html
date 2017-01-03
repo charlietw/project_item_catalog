@@ -4,7 +4,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Item Catalog</title>
+        <title>Meals catalog</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="./css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="./css/style.css">
@@ -16,17 +16,39 @@
 <body>
     <section class="container">
         <header>
-            <nav class="navbar navbar-default">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">Item Catalog</a>
-                </div>
+            <div class="col-sm-12">
+                <!-- Navbar -->
+                <nav class="navbar navbar-inverse">
+                    <div class="navbar-header">
+                        <!-- This bit is more complicated because it toggles based on if it's mobile view-->
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">Meals catalog</a>
+                    </div>
+
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="#">Home</a></li>
+                            <li><a href="#">Add</a></li>
+                            <li><a href="#">Delete</a></li>
+                            <li><a href="#">Edit</a></li>
+                        </ul>
+                    </div>
             </nav>
+            </div>
+
         </header>
+
+        <body>
+            <div class="col-sm-12">
+                <h1>Meals catalog</h1>
+                <hr>
+            </div>
+        </body>
+
     </section>
 </body>
