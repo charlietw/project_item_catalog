@@ -163,8 +163,9 @@ def getUserID(email):
 @app.route('/gdisconnect')
 def gdisconnect():
     if 'username' not in login_session:
-      print "Not logged in."
-      return redirect(url_for('home'))
+    	flash("You were not logged in!")
+    	print "Not logged in."
+    	return redirect(url_for('home'))
     credentials = login_session['credentials']
     print credentials
     access_token = credentials
