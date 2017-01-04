@@ -29,13 +29,13 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="#">Meals catalog</a>
+                        <a class="navbar-brand" href="{{url_for('home')}}">Meals catalog</a>
                     </div>
 
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav navbar-left">
-                            <li><a href="{{url_for('home')}}">Home</a></li>
-                            <li><a href="#">Add meal</a></li>
+                            <li><a href="{{url_for('home')}}"><span class="glyphicon glyphicon-home"></span></a></li>
+                            <li><a href="{{url_for('newMeal')}}">Add meal</a></li>
                             <li><a href="{{url_for('newSupplier')}}">Add supplier</a></li>
                             <li><a href="#">Edit</a></li>
                         </ul>

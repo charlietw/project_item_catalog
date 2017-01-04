@@ -229,6 +229,14 @@ def home():
   return render_template('home.html', suppliers = suppliers)
   # return render_template('publicrestaurants.html', restaurants = restaurants)
 
+@app.route('/suppliers')
+def suppliers():
+  suppliers = session.query(Supplier).order_by(asc(Supplier.name))
+  print login_session
+  # if 'username' not in login_session:
+  return render_template('suppliers.html', suppliers = suppliers)
+  # return render_template('publicrestaurants.html', restaurants = restaurants)
+
 
 # #Create a new supplier
 @app.route('/supplier/new/', methods=['GET','POST'])
@@ -290,15 +298,17 @@ def showMenu(supplier_id):
 #Create a new menu item
 @app.route('/newmeal/',methods=['GET','POST'])
 def newMeal():
-  suppliers = session.query(Supplier).all()
-  if request.method == 'POST':
-      newMeal = Meal(name = request.form['name'], description = request.form['description'], price = request.form['price'], supplier_id = request.form['supplier'])
-      session.add(newMeal)
-      session.commit()
-      flash('New meal "%s" successfully created' % (newMeal.name))
-      return redirect(url_for('home'))
-  else:
-      return render_template('newMeal.html', suppliers = suppliers)
+	if 'username' not in login_session:
+		return redirect ('/login')
+	suppliers = session.query(Supplier).all()
+	if request.method == 'POST':
+	    newMeal = Meal(name = request.form['name'], description = request.form['description'], price = request.form['price'], supplier_id = request.form['supplier'])
+	    session.add(newMeal)
+	    session.commit()
+	    flash('New meal "%s" successfully created' % (newMeal.name))
+	    return redirect(url_for('home'))
+	else:
+	    return render_template('newMeal.html', suppliers = suppliers)
 
 # #Edit a menu item
 # @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/edit', methods=['GET','POST'])
