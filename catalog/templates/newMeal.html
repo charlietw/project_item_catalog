@@ -15,7 +15,10 @@
                         Description:<br>
                         <input type="text" class="form-control" name="description">
                         Price:<br>
-                        <input type="text" class="form-control" name="price">
+                        <div class="input-group">
+                            <div class="input-group-addon">£</div>
+                            <input type ="text" maxlength="10" class="form-control" name="price">
+                        </div>
                         Supplier:<br>
                         {% for supplier in suppliers %}
                         <input type="radio" name="supplier" value="{{supplier.id}}">{{supplier.name}}<br>
@@ -32,12 +35,3 @@
         </div>
 
 {% endblock %}
-
-name =Column(String(80), nullable = False)
-    id = Column(Integer, primary_key = True)
-    description = Column(String(250))
-    price = Column(String(8))
-    supplier_id = Column(Integer,ForeignKey('supplier.id'))
-    supplier = relationship(Supplier)
-    user_id = Column(Integer,ForeignKey('user.id'))
-    user = relationship(User)

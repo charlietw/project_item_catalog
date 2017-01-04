@@ -8,37 +8,39 @@
     </div>
 </div>
 <div class="row">
-    <div class="panel panel-default">
-        <table class="table">
-        <tr>
-            <th class="col-md-1">ID</th>
-            <th class="col-md-3">Name</th>
-            <th class="col-md-3">Description</th>
-            <th class="col-md-3">Price</th>
-            <th class="col-md-1">Edit</th>
-            <th class="col-md-1">Delete</th>
-        </tr>
-        {% for meal in meals %}
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <table class="table">
             <tr>
-                <td>{{meal.id}}</td>
-                <td>{{meal.name}}</td>
-                <td>{{meal.description}}</td>
-                <td>{{meal.price}}</td>
-                <td><a href="#">
-                        <button type="button" class="btn btn-default btn-sm">
-                            <span class="glyphicon glyphicon-pencil"></span> 
-                        </button>
-                    </a>
-                </td>
-                <td><a href="#">
-                        <button type="button" class="btn btn-default btn-sm">
-                            <span class="glyphicon glyphicon-remove"></span> 
-                        </button>
-                    </a>
-                </td>
+                <th class="col-md-1">ID</th>
+                <th class="col-md-3">Name</th>
+                <th class="col-md-3">Description</th>
+                <th class="col-md-3">Price</th>
+                <th class="col-md-1">Edit</th>
+                <th class="col-md-1">Delete</th>
             </tr>
-        {% endfor %}
-        </table>
+            {% for meal in meals %}
+                <tr>
+                    <td>{{meal.id}}</td>
+                    <td>{{meal.name}}</td>
+                    <td>{{meal.description}}</td>
+                    <td>{{meal.price}}</td>
+                    <td><a href="{{url_for('editmeal', supplier_id = meal.supplier_id, meal_id = meal.id)}}">
+                            <button type="button" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span> 
+                            </button>
+                        </a>
+                    </td>
+                    <td><a href="{{url_for('deleteMeal', supplier_id = meal.supplier_id, meal_id = meal.id)}}">
+                            <button type="button" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-remove"></span> 
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
     </div>
 </div>
 

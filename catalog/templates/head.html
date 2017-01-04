@@ -46,7 +46,21 @@
                     </div>
                 </nav>
             </div>
+        <div class="row">
+          <div class="col-md-12">
+          {% with messages = get_flashed_messages() %}
+              {% if messages %}
+              <ul class="flash text-center">
+              {% for message in messages %}
+                  <li> <strong> {{ message }} </strong> </li>
+              {% endfor %}
+              </ul>
+              {% endif %}
+          {% endwith %}
+          </div>
+        </div>
         </header>
+        
 
         {% block content %}
         {% endblock %}

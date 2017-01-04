@@ -255,31 +255,33 @@ def newSupplier():
 #Edit a supplier
 @app.route('/supplier/<int:supplier_id>/edit/', methods = ['GET', 'POST'])
 def editSupplier(supplier_id):
-  editedSupplier = session.query(Supplier).filter_by(id = supplier_id).one()
-  if request.method == 'POST':
-      if request.form['name']:
-        editedSupplier.name = request.form['name']
-        session.commit()
-        flash('Successfully renamed supplier to %s' % editedSupplier.name)
-        return redirect(url_for('home'))
-  return render_template('editSupplier.html', supplier = editedSupplier)
+	if 'username' not in login_session:
+		return redirect ('/login')
+	editedSupplier = session.query(Supplier).filter_by(id = supplier_id).one()
+	if request.method == 'POST':
+	  if request.form['name']:
+	    editedSupplier.name = request.form['name']
+	    session.commit()
+	    flash('Successfully renamed supplier to %s' % editedSupplier.name)
+	    return redirect(url_for('suppliers'))
+	return render_template('editSupplier.html', supplier = editedSupplier)
 
 
-#Delete a supplier
-@app.route('/supplier/<int:supplier_id>/delete/', methods = ['GET','POST'])
-def deleteSupplier(supplier_id):
-  supplierToDelete = session.query(Supplier).filter_by(id = supplier_id).one()
-  if request.method == 'POST':
-    if 'user_id' in login_session:
-      if supplierToDelete.user_id == login_session['user_id']:
-        session.delete(supplierToDelete)
-        flash('%s successfully deleted' % supplierToDelete.name)
-        session.commit()
-      else:
-        flash('You may only delete resaurants you have created.')
-    return redirect(url_for('home', supplier_id = supplier_id))
-  else:
-    return render_template('deleteSupplier.html',supplier = supplierToDelete)
+# #Delete a supplier
+# @app.route('/supplier/<int:supplier_id>/delete/', methods = ['GET','POST'])
+# def deleteSupplier(supplier_id):
+#   supplierToDelete = session.query(Supplier).filter_by(id = supplier_id).one()
+#   if request.method == 'POST':
+#     if 'user_id' in login_session:
+#       if supplierToDelete.user_id == login_session['user_id']:
+#         session.delete(supplierToDelete)
+#         flash('%s successfully deleted' % supplierToDelete.name)
+#         session.commit()
+#       else:
+#         flash('You may only delete resaurants you have created.')
+#     return redirect(url_for('home', supplier_id = supplier_id))
+#   else:
+#     return render_template('deleteSupplier.html',supplier = supplierToDelete)
 
 #Show a supplier menu
 @app.route('/supplier/<int:supplier_id>/')
@@ -295,7 +297,7 @@ def showMenu(supplier_id):
 
 
 
-#Create a new menu item
+#Create a new meal
 @app.route('/newmeal/',methods=['GET','POST'])
 def newMeal():
 	if 'username' not in login_session:
@@ -310,41 +312,43 @@ def newMeal():
 	else:
 	    return render_template('newMeal.html', suppliers = suppliers)
 
-# #Edit a menu item
-# @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/edit', methods=['GET','POST'])
-# def editMenuItem(restaurant_id, menu_id):
+#Edit a meal
+@app.route('/supplier/<int:supplier_id>/menu/<int:meal_id>/edit', methods=['GET','POST'])
+def editmeal(supplier_id, meal_id):
+	if 'username' not in login_session:
+		return redirect ('/login')
+	editedMeal = session.query(Meal).filter_by(id = meal_id).one()
+	supplier = session.query(Supplier).filter_by(id = supplier_id).one()
+	if request.method == 'POST':
+		if request.form['name']:
+			editedMeal.name = request.form['name']
+		if request.form['description']:
+			editedMeal.description = request.form['description']
+		if request.form['price']:
+			editedMeal.price = request.form['price']
 
-#     editedItem = session.query(MenuItem).filter_by(id = menu_id).one()
-#     restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
-#     if request.method == 'POST':
-#         if request.form['name']:
-#             editedItem.name = request.form['name']
-#         if request.form['description']:
-#             editedItem.description = request.form['description']
-#         if request.form['price']:
-#             editedItem.price = request.form['price']
-#         if request.form['course']:
-#             editedItem.course = request.form['course']
-#         session.add(editedItem)
-#         session.commit()
-#         flash('Menu Item Successfully Edited')
-#         return redirect(url_for('showMenu', restaurant_id = restaurant_id))
-#     else:
-#         return render_template('editmenuitem.html', restaurant_id = restaurant_id, menu_id = menu_id, item = editedItem)
+		session.add(editedMeal)
+		session.commit()
+		flash('Menu Item Successfully Edited')
+		return redirect(url_for('showMenu', supplier_id = supplier_id))
+	else:
+		return render_template('editmeal.html', supplier_id = supplier_id, meal_id = meal_id, item = editedMeal)
 
 
-# #Delete a menu item
-# @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/delete', methods = ['GET','POST'])
-# def deleteMenuItem(restaurant_id,menu_id):
-#     restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
-#     itemToDelete = session.query(MenuItem).filter_by(id = menu_id).one()
-#     if request.method == 'POST':
-#         session.delete(itemToDelete)
-#         session.commit()
-#         flash('Menu Item Successfully Deleted')
-#         return redirect(url_for('showMenu', restaurant_id = restaurant_id))
-#     else:
-#         return render_template('deleteMenuItem.html', item = itemToDelete)
+#Delete a menu item
+@app.route('/supplier/<int:supplier_id>/menu/<int:meal_id>/delete', methods = ['GET','POST'])
+def deleteMeal(supplier_id,meal_id):
+	if 'username' not in login_session:
+		return redirect ('/login')
+	supplier = session.query(Supplier).filter_by(id = supplier_id).one()
+	itemToDelete = session.query(Meal).filter_by(id = meal_id).one()
+	if request.method == 'POST':
+		session.delete(itemToDelete)
+		session.commit()
+		flash('Meal successfully deleted')
+		return redirect(url_for('showMenu', supplier_id = supplier_id))
+	else:
+		return render_template('deleteMeal.html', item = itemToDelete)
 
 
 
