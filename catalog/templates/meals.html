@@ -1,0 +1,24 @@
+{% extends "head.html" %}
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <h1>Meals provided by {{supplier.name}}</h1>
+        <ul>
+            {% for meal in meals %}
+                <li>{{meal.name}}
+                    <a href="#">
+                        <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span> Edit 
+                        </button>
+                    </a>
+                </li>
+                <br>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div id="result"></div>
+
+{% endblock %}

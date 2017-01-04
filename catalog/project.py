@@ -166,6 +166,7 @@ def gdisconnect():
       print "Not logged in."
       return redirect(url_for('home'))
     credentials = login_session['credentials']
+    print credentials
     access_token = credentials
     print 'In gdisconnect access token is %s', access_token
     print access_token
@@ -272,32 +273,32 @@ def deleteSupplier(supplier_id):
   else:
     return render_template('deleteSupplier.html',supplier = supplierToDelete)
 
-# #Show a restaurant menu
-# @app.route('/restaurant/<int:restaurant_id>/')
-# @app.route('/restaurant/<int:restaurant_id>/menu/')
-# def showMenu(restaurant_id):
-#     restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
-#     items = session.query(MenuItem).filter_by(restaurant_id = restaurant_id).all()
-#     restaurantid = restaurant.user_id
-#     if 'username' in login_session:
-#       if restaurantid == login_session['user_id']:
-#         return render_template('menu.html', items = items, restaurant = restaurant)
-#     return render_template('publicmenu.html', items = items, restaurant = restaurant, creator = login_session)
+#Show a supplier menu
+@app.route('/supplier/<int:supplier_id>/')
+@app.route('/supplier/<int:supplier_id>/menu/')
+def showMenu(supplier_id):
+    supplier = session.query(Supplier).filter_by(id = supplier_id).one()
+    meals = session.query(Meal).filter_by(supplier_id = supplier_id).all()
+    # supplierid = supplier.user_id
+    # if 'username' in login_session:
+    #   if supplierid == login_session['user_id']:
+    #     return render_template('menu.html', meals = meals, supplier = supplier)
+    return render_template('meals.html', meals = meals, supplier = supplier)
 
 
 
-# #Create a new menu item
-# @app.route('/restaurant/<int:restaurant_id>/menu/new/',methods=['GET','POST'])
-# def newMenuItem(restaurant_id):
-#   restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
-#   if request.method == 'POST':
-#       newItem = MenuItem(name = request.form['name'], description = request.form['description'], price = request.form['price'], course = request.form['course'], restaurant_id = restaurant_id, user_id=restaurant.user_id)
-#       session.add(newItem)
-#       session.commit()
-#       flash('New Menu %s Item Successfully Created' % (newItem.name))
-#       return redirect(url_for('showMenu', restaurant_id = restaurant_id))
-#   else:
-#       return render_template('newmenuitem.html', restaurant_id = restaurant_id)
+#Create a new menu item
+@app.route('/newmeal/',methods=['GET','POST'])
+def newMeal():
+  suppliers = session.query(Supplier).all()
+  if request.method == 'POST':
+      newMeal = Meal(name = request.form['name'], description = request.form['description'], price = request.form['price'], supplier_id = request.form['supplier'])
+      session.add(newMeal)
+      session.commit()
+      flash('New meal "%s" successfully created' % (newMeal.name))
+      return redirect(url_for('home'))
+  else:
+      return render_template('newMeal.html', suppliers = suppliers)
 
 # #Edit a menu item
 # @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/edit', methods=['GET','POST'])

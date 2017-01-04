@@ -1,0 +1,43 @@
+{% extends "head.html" %}
+{% block content %}
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>Add a meal</h1>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <form method="POST">
+                        Name:<br>
+                        <input type="text" class="form-control" name="name">
+                        Description:<br>
+                        <input type="text" class="form-control" name="description">
+                        Price:<br>
+                        <input type="text" class="form-control" name="price">
+                        Supplier:<br>
+                        {% for supplier in suppliers %}
+                        <input type="radio" name="supplier" value="{{supplier.id}}">{{supplier.name}}<br>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-default">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Submit</button>
+                        <a href="{{url_for('home')}}">
+                        <button type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel</button>
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+
+name =Column(String(80), nullable = False)
+    id = Column(Integer, primary_key = True)
+    description = Column(String(250))
+    price = Column(String(8))
+    supplier_id = Column(Integer,ForeignKey('supplier.id'))
+    supplier = relationship(Supplier)
+    user_id = Column(Integer,ForeignKey('user.id'))
+    user = relationship(User)

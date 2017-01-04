@@ -19,19 +19,11 @@
         <ul>
             {% for supplier in suppliers %}
                 <li>{{supplier.name}}
-
-                <a href="{{url_for('editSupplier', supplier_id = supplier.id)}}">
-                    <button type="button" class="btn btn-default btn-sm">
-                        <span class="glyphicon glyphicon-pencil"></span> Edit 
-                    </button>
-                </a>
-
-                <a href="{{url_for('deleteSupplier', supplier_id = supplier.id)}}">
-                    <button type="button" class="btn btn-default btn-sm">
-                        <span class="glyphicon glyphicon-remove"></span> Delete 
-                    </button>
-
-                </a>
+                    <a href="{{url_for('editSupplier', supplier_id = supplier.id)}}">
+                        <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span> Edit 
+                        </button>
+                    </a>
                 </li>
                 <br>
             {% endfor %}
