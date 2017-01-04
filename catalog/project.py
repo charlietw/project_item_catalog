@@ -250,27 +250,27 @@ def editSupplier(supplier_id):
   if request.method == 'POST':
       if request.form['name']:
         editedSupplier.name = request.form['name']
-        flash('Supplier name successfully changed to %s' % editedSupplier.name)
+        session.commit()
+        flash('Successfully renamed supplier to %s' % editedSupplier.name)
         return redirect(url_for('home'))
+  return render_template('editSupplier.html', supplier = editedSupplier)
+
+
+#Delete a supplier
+@app.route('/supplier/<int:supplier_id>/delete/', methods = ['GET','POST'])
+def deleteSupplier(supplier_id):
+  supplierToDelete = session.query(Supplier).filter_by(id = supplier_id).one()
+  if request.method == 'POST':
+    if 'user_id' in login_session:
+      if supplierToDelete.user_id == login_session['user_id']:
+        session.delete(supplierToDelete)
+        flash('%s successfully deleted' % supplierToDelete.name)
+        session.commit()
+      else:
+        flash('You may only delete resaurants you have created.')
+    return redirect(url_for('home', supplier_id = supplier_id))
   else:
-    return render_template('editSupplier.html', supplier = editedSupplier)
-
-
-# #Delete a restaurant
-# @app.route('/restaurant/<int:restaurant_id>/delete/', methods = ['GET','POST'])
-# def deleteRestaurant(restaurant_id):
-#   restaurantToDelete = session.query(Restaurant).filter_by(id = restaurant_id).one()
-#   if request.method == 'POST':
-#     if 'user_id' in login_session:
-#       if restaurantToDelete.user_id == login_session['user_id']:
-#         session.delete(restaurantToDelete)
-#         flash('%s Successfully Deleted' % restaurantToDelete.name)
-#         session.commit()
-#       else:
-#         flash('You may only delete resaurants you have created.')
-#     return redirect(url_for('showRestaurants', restaurant_id = restaurant_id))
-#   else:
-#     return render_template('deleteRestaurant.html',restaurant = restaurantToDelete)
+    return render_template('deleteSupplier.html',supplier = supplierToDelete)
 
 # #Show a restaurant menu
 # @app.route('/restaurant/<int:restaurant_id>/')

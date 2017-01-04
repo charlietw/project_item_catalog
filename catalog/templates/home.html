@@ -1,7 +1,7 @@
 {% extends "head.html" %}
 {% block content %}
 
-<div class="flash row">
+<div class="flash1 row">
     {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul>
@@ -18,8 +18,22 @@
         <h1>Suppliers</h1>
         <ul>
             {% for supplier in suppliers %}
-                <li>{{supplier.name}}</li>
-                <a href="{{url_for('editSupplier', supplier_id = supplier.id)}}">Edit</a>
+                <li>{{supplier.name}}
+
+                <a href="{{url_for('editSupplier', supplier_id = supplier.id)}}">
+                    <button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-pencil"></span> Edit 
+                    </button>
+                </a>
+
+                <a href="{{url_for('deleteSupplier', supplier_id = supplier.id)}}">
+                    <button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-remove"></span> Delete 
+                    </button>
+
+                </a>
+                </li>
+                <br>
             {% endfor %}
         </ul>
     </div>

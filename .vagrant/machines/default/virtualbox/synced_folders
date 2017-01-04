@@ -1,1 +1,1 @@
-{"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"C:/Udacity/Projects/project_five_item_catalog/project_item_catalog","disabled":false,"__vagrantfile":true}}}
+{"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"C:/VagrantVM/fullstack-nanodegree-vm/vagrant","disabled":false,"__vagrantfile":true}}}
