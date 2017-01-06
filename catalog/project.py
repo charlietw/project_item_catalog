@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect,jsonify, url_for, flash
+from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
 app = Flask(__name__)
 
 from sqlalchemy import create_engine, asc
@@ -201,12 +201,12 @@ def gdisconnect():
       response.headers['Content-Type'] = 'application/json'
       return response
 
-# #JSON APIs to view Restaurant Information
-# @app.route('/restaurant/<int:restaurant_id>/menu/JSON')
-# def restaurantMenuJSON(restaurant_id):
-#     restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
-#     items = session.query(MenuItem).filter_by(restaurant_id = restaurant_id).all()
-#     return jsonify(MenuItems=[i.serialize for i in items])
+#JSON APIs to view supplier Information
+@app.route('/supplier/<int:supplier_id>/menu/JSON')
+def supplierMenuJSON(supplier_id):
+    supplier = session.query(Supplier).filter_by(id = supplier_id).one()
+    items = session.query(Meal).filter_by(supplier_id = supplier_id).all()
+    return jsonify(MenuItems=[i.serialize for i in items])
 
 
 # @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/JSON')
