@@ -9,11 +9,10 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = 'user'
 
-
-    name = Column(String(250), nullable = False)
+    name = Column(String(250), nullable=False)
     email = Column(String(250))
     picture = Column(String(250))
-    id = Column(Integer, primary_key = True)
+    id = Column(Integer, primary_key=True)
 
 
 class Supplier(Base):
@@ -21,44 +20,41 @@ class Supplier(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
-    user_id = Column(Integer,ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
     @property
     def serialize(self):
-       """Return object data in easily serializeable format"""
-       return {
-           'name'         : self.name,
-           'id'           : self.id,
-           'creator'           : self.user.name,
-       }
+        # Return object data in easily serializeable format
+        return {
+            'name': self.name,
+            'id': self.id,
+            'creator': self.user.name,
+          }
+
 
 class Meal(Base):
     __tablename__ = 'meal'
 
-
-    name =Column(String(80), nullable = False)
-    id = Column(Integer, primary_key = True)
+    name = Column(String(80), nullable=False)
+    id = Column(Integer, primary_key=True)
     description = Column(String(250))
     price = Column(String(8))
-    supplier_id = Column(Integer,ForeignKey('supplier.id'))
+    supplier_id = Column(Integer, ForeignKey('supplier.id'))
     supplier = relationship(Supplier)
-    user_id = Column(Integer,ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
-
 
     @property
     def serialize(self):
-       """Return object data in easily serializeable format"""
-       return {
-           'name'         : self.name,
-           'description'         : self.description,
-           'id'         : self.id,
-           'price'         : self.price,
-           'supplier'         :self.supplier.name,
-       }
-
-
+        # Return object data in easily serializeable format
+        return {
+            'name': self.name,
+            'description': self.description,
+            'id': self.id,
+            'price': self.price,
+            'supplier': self.supplier.name,
+        }
 
 engine = create_engine('sqlite:///mealscatalog.db')
 
