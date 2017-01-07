@@ -240,7 +240,13 @@ def check_author(object):
         else:
             flash("You do not have permission to modify this record.")
     except:
-        flash("An error ocurred (refer to the check_author function).")
+        # I have put this in because I added
+        # the 'user' attribute to the 'Meal' class
+        # late, so not every record has a 'user'.
+        if not object.user:
+            return True
+        else:
+            flash("An error ocurred (refer to the check_author function).")
 
 @app.route('/')
 @app.route('/home/')
