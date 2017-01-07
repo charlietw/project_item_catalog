@@ -13,3 +13,5 @@ For project 4 of Udacity's Full Stack Nanodegree
 6. Navigate to http://localhost:5000/login to login using your Google account (if you had set the project to run on a different port then change 5000 to that port).
 7. There are several JSON endpoints included in this application. For full routes and hyperlink construction view the project.py file (lines 199-222). To start with, try http://localhost:5000/meals/JSON to view all of the meals and http://localhost:5000/suppliers/JSON to view all of the suppliers.
 8. Once you have finished with the application, type 'ctrl + c' in the cmd window, then type 'vagrant halt' to gracefully shut down the virtual machine without losing any data.
+
+Note: Lines 23-196 of project.py (relating to third party authentication) have been adapted from [this repo] (https://github.com/udacity/ud330), found in the instructor's notes as part of Udacity's Full Stack Nanodegree.
