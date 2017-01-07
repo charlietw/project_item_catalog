@@ -54,6 +54,7 @@ class Meal(Base):
            'description'         : self.description,
            'id'         : self.id,
            'price'         : self.price,
+           'supplier'         :self.supplier_id
        }
 
 
