@@ -28,6 +28,7 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+
 @app.route('/login')
 def showLogin():
     """Create anti-forgery state token"""
@@ -248,6 +249,7 @@ def check_author(object):
         else:
             flash("An error ocurred (refer to the check_author function).")
 
+
 @app.route('/')
 @app.route('/home/')
 def home():
@@ -283,7 +285,7 @@ def editSupplier(supplier_id):
     """Edit a supplier"""
     editedSupplier = session.query(Supplier).filter_by(id=supplier_id).one()
     if request.method == 'POST':
-        if request.form['name'] and check_author(editedSupplier) == True:
+        if request.form['name'] and check_author(editedSupplier) is True:
             editedSupplier.name = request.form['name']
             session.commit()
             flash('Successfully renamed supplier to %s' % editedSupplier.name)
