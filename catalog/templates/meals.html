@@ -15,7 +15,7 @@
                 <th class="col-md-1">ID</th>
                 <th class="col-md-3">Name</th>
                 <th class="col-md-3">Description</th>
-                <th class="col-md-3">Price</th>
+                <th class="col-md-3">Price (£)</th>
                 <th class="col-md-1">Edit</th>
                 <th class="col-md-1">Delete</th>
             </tr>
@@ -27,13 +27,13 @@
                     <td>{{meal.price}}</td>
                     <td><a href="{{url_for('editmeal', supplier_id = meal.supplier_id, meal_id = meal.id)}}">
                             <button type="button" class="btn btn-default btn-sm">
-                                <span class="glyphicon glyphicon-pencil"></span> 
+                                <span class="glyphicon glyphicon-pencil"></span>
                             </button>
                         </a>
                     </td>
                     <td><a href="{{url_for('deleteMeal', supplier_id = meal.supplier_id, meal_id = meal.id)}}">
                             <button type="button" class="btn btn-default btn-sm">
-                                <span class="glyphicon glyphicon-remove"></span> 
+                                <span class="glyphicon glyphicon-remove"></span>
                             </button>
                         </a>
                     </td>
