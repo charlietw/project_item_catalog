@@ -12,6 +12,7 @@ import httplib2
 import json
 from flask import make_response
 import requests
+from functools import wraps
 
 app = Flask(__name__)
 
@@ -26,8 +27,6 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
-
-
 
 @app.route('/login')
 def showLogin():
@@ -223,6 +222,26 @@ def suppliersJSON():
     return jsonify(Suppliers=[r.serialize for r in suppliers])
 
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' in login_session:
+            return f(*args, **kwargs)
+        else:
+            flash("You must log in to access this page.")
+            return redirect('/login')
+    return decorated_function
+
+
+def check_author(object):
+    try:
+        if object.user.name == login_session['username']:
+            return True
+        else:
+            flash("You do not have permission to modify this record.")
+    except:
+        flash("An error ocurred (refer to the check_author function).")
+
 @app.route('/')
 @app.route('/home/')
 def home():
@@ -238,10 +257,9 @@ def suppliers():
 
 
 @app.route('/supplier/new/', methods=['GET', 'POST'])
+@login_required
 def newSupplier():
     """Create a new supplier"""
-    if 'username' not in login_session:
-        return redirect('/login')
     if request.method == 'POST':
         newSupplier = Supplier(name=request.form['name'],
                                user_id=login_session['user_id'])
@@ -254,13 +272,12 @@ def newSupplier():
 
 
 @app.route('/supplier/<int:supplier_id>/edit/', methods=['GET', 'POST'])
+@login_required
 def editSupplier(supplier_id):
     """Edit a supplier"""
-    if 'username' not in login_session:
-        return redirect('/login')
     editedSupplier = session.query(Supplier).filter_by(id=supplier_id).one()
     if request.method == 'POST':
-        if request.form['name']:
+        if request.form['name'] and check_author(editedSupplier) == True:
             editedSupplier.name = request.form['name']
             session.commit()
             flash('Successfully renamed supplier to %s' % editedSupplier.name)
@@ -278,16 +295,16 @@ def showMenu(supplier_id):
 
 
 @app.route('/newmeal/', methods=['GET', 'POST'])
+@login_required
 def newMeal():
     """Create a new meal"""
-    if 'username' not in login_session:
-        return redirect('/login')
     suppliers = session.query(Supplier).all()
     if request.method == 'POST':
         newMeal = Meal(name=request.form['name'],
                        description=request.form['description'],
                        price=request.form['price'],
-                       supplier_id=request.form['supplier'])
+                       supplier_id=request.form['supplier'],
+                       user_id=login_session['user_id'])
         session.add(newMeal)
         session.commit()
         flash('New meal "%s" successfully created' % (newMeal.name))
@@ -298,46 +315,43 @@ def newMeal():
 
 @app.route('/supplier/<int:supplier_id>/menu/<int:meal_id>/edit',
            methods=['GET', 'POST'])
+@login_required
 def editmeal(supplier_id, meal_id):
     """ Edit a meal """
-    if 'username' not in login_session:
-        return redirect('/login')
     editedMeal = session.query(Meal).filter_by(id=meal_id).one()
     supplier = session.query(Supplier).filter_by(id=supplier_id).one()
     if request.method == 'POST':
-        if request.form['name']:
-            editedMeal.name = request.form['name']
-        if request.form['description']:
-            editedMeal.description = request.form['description']
-        if request.form['price']:
-            editedMeal.price = request.form['price']
-
-        session.add(editedMeal)
-        session.commit()
-        flash('Menu Item Successfully Edited')
-        return redirect(url_for('showMenu', supplier_id=supplier_id))
-    else:
-        return render_template('editmeal.html',
-                               supplier_id=supplier_id,
-                               meal_id=meal_id,
-                               item=editedMeal)
+        if check_author(editedMeal):
+            if request.form['name']:
+                editedMeal.name = request.form['name']
+            if request.form['description']:
+                editedMeal.description = request.form['description']
+            if request.form['price']:
+                editedMeal.price = request.form['price']
+            session.add(editedMeal)
+            session.commit()
+            flash('Menu Item Successfully Edited')
+            return redirect(url_for('showMenu', supplier_id=supplier_id))
+    return render_template('editmeal.html',
+                           supplier_id=supplier_id,
+                           meal_id=meal_id,
+                           item=editedMeal)
 
 
 @app.route('/supplier/<int:supplier_id>/menu/<int:meal_id>/delete',
            methods=['GET', 'POST'])
+@login_required
 def deleteMeal(supplier_id, meal_id):
     """Delete a menu item"""
-    if 'username' not in login_session:
-        return redirect('/login')
     supplier = session.query(Supplier).filter_by(id=supplier_id).one()
     itemToDelete = session.query(Meal).filter_by(id=meal_id).one()
     if request.method == 'POST':
-        session.delete(itemToDelete)
-        session.commit()
-        flash('Meal successfully deleted')
-        return redirect(url_for('showMenu', supplier_id=supplier_id))
-    else:
-        return render_template('deleteMeal.html', item=itemToDelete)
+        if check_author(itemToDelete):
+            session.delete(itemToDelete)
+            session.commit()
+            flash('Meal successfully deleted')
+            return redirect(url_for('showMenu', supplier_id=supplier_id))
+    return render_template('deleteMeal.html', item=itemToDelete)
 
 
 if __name__ == '__main__':
