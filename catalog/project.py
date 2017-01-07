@@ -213,10 +213,15 @@ def mealJSON(supplier_id, meal_id):
     meal = session.query(Meal).filter_by(id = meal_id).one()
     return jsonify(Meal=meal.serialize)
 
+@app.route('/meals/JSON')
+def mealsJSON():
+    meals = session.query(Meal).all()
+    return jsonify(Meals=[r.serialize for r in meals])
+
 @app.route('/suppliers/JSON')
 def suppliersJSON():
     suppliers = session.query(Supplier).all()
-    return jsonify(suppliers=[r.serialize for r in suppliers])
+    return jsonify(Suppliers=[r.serialize for r in suppliers])
 
 
 # Home
