@@ -28,9 +28,10 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
-# Create anti-forgery state token
+
 @app.route('/login')
 def showLogin():
+    """Create anti-forgery state token"""
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
     login_session['state'] = state
@@ -222,7 +223,6 @@ def suppliersJSON():
     return jsonify(Suppliers=[r.serialize for r in suppliers])
 
 
-# Home
 @app.route('/')
 @app.route('/home/')
 def home():
@@ -237,9 +237,9 @@ def suppliers():
     return render_template('suppliers.html', suppliers=suppliers)
 
 
-# Create a new supplier
 @app.route('/supplier/new/', methods=['GET', 'POST'])
 def newSupplier():
+    """Create a new supplier"""
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
@@ -253,9 +253,9 @@ def newSupplier():
         return render_template('newSupplier.html')
 
 
-# Edit a supplier
 @app.route('/supplier/<int:supplier_id>/edit/', methods=['GET', 'POST'])
 def editSupplier(supplier_id):
+    """Edit a supplier"""
     if 'username' not in login_session:
         return redirect('/login')
     editedSupplier = session.query(Supplier).filter_by(id=supplier_id).one()
@@ -268,18 +268,18 @@ def editSupplier(supplier_id):
     return render_template('editSupplier.html', supplier=editedSupplier)
 
 
-# Show a supplier menu
 @app.route('/supplier/<int:supplier_id>/')
 @app.route('/supplier/<int:supplier_id>/menu/')
 def showMenu(supplier_id):
+    """Show the menu of one particular supplier"""
     supplier = session.query(Supplier).filter_by(id=supplier_id).one()
     meals = session.query(Meal).filter_by(supplier_id=supplier_id).all()
     return render_template('meals.html', meals=meals, supplier=supplier)
 
 
-# Create a new meal
 @app.route('/newmeal/', methods=['GET', 'POST'])
 def newMeal():
+    """Create a new meal"""
     if 'username' not in login_session:
         return redirect('/login')
     suppliers = session.query(Supplier).all()
@@ -296,10 +296,10 @@ def newMeal():
         return render_template('newMeal.html', suppliers=suppliers)
 
 
-# Edit a meal
 @app.route('/supplier/<int:supplier_id>/menu/<int:meal_id>/edit',
            methods=['GET', 'POST'])
 def editmeal(supplier_id, meal_id):
+    """ Edit a meal """
     if 'username' not in login_session:
         return redirect('/login')
     editedMeal = session.query(Meal).filter_by(id=meal_id).one()
@@ -323,10 +323,10 @@ def editmeal(supplier_id, meal_id):
                                item=editedMeal)
 
 
-# Delete a menu item
 @app.route('/supplier/<int:supplier_id>/menu/<int:meal_id>/delete',
            methods=['GET', 'POST'])
 def deleteMeal(supplier_id, meal_id):
+    """Delete a menu item"""
     if 'username' not in login_session:
         return redirect('/login')
     supplier = session.query(Supplier).filter_by(id=supplier_id).one()
