@@ -30,6 +30,7 @@ class Supplier(Base):
        return {
            'name'         : self.name,
            'id'           : self.id,
+           'creator'           : self.user.name,
        }
 
 class Meal(Base):
@@ -54,7 +55,7 @@ class Meal(Base):
            'description'         : self.description,
            'id'         : self.id,
            'price'         : self.price,
-           'supplier'         :self.supplier_id
+           'supplier'         :self.supplier.name,
        }
 
 

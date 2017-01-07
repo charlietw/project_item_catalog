@@ -202,22 +202,21 @@ def gdisconnect():
       return response
 
 #JSON APIs to view supplier Information
-@app.route('/supplier/<int:supplier_id>/menu/JSON')
+@app.route('/supplier/<int:supplier_id>/meals/JSON')
 def supplierMenuJSON(supplier_id):
     supplier = session.query(Supplier).filter_by(id = supplier_id).one()
     items = session.query(Meal).filter_by(supplier_id = supplier_id).all()
-    return jsonify(MenuItems=[i.serialize for i in items])
+    return jsonify(Meals=[i.serialize for i in items])
 
+@app.route('/supplier/<int:supplier_id>/meals/<int:meal_id>/JSON')
+def mealJSON(supplier_id, meal_id):
+    meal = session.query(Meal).filter_by(id = meal_id).one()
+    return jsonify(Meal=meal.serialize)
 
-# @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/JSON')
-# def menuItemJSON(restaurant_id, menu_id):
-#     Menu_Item = session.query(MenuItem).filter_by(id = menu_id).one()
-#     return jsonify(Menu_Item = Menu_Item.serialize)
-
-# @app.route('/restaurant/JSON')
-# def restaurantsJSON():
-#     restaurants = session.query(Restaurant).all()
-#     return jsonify(restaurants= [r.serialize for r in restaurants])
+@app.route('/suppliers/JSON')
+def suppliersJSON():
+    suppliers = session.query(Supplier).all()
+    return jsonify(suppliers=[r.serialize for r in suppliers])
 
 
 # Home
@@ -268,22 +267,6 @@ def editSupplier(supplier_id):
 	return render_template('editSupplier.html', supplier = editedSupplier)
 
 
-# #Delete a supplier
-# @app.route('/supplier/<int:supplier_id>/delete/', methods = ['GET','POST'])
-# def deleteSupplier(supplier_id):
-#   supplierToDelete = session.query(Supplier).filter_by(id = supplier_id).one()
-#   if request.method == 'POST':
-#     if 'user_id' in login_session:
-#       if supplierToDelete.user_id == login_session['user_id']:
-#         session.delete(supplierToDelete)
-#         flash('%s successfully deleted' % supplierToDelete.name)
-#         session.commit()
-#       else:
-#         flash('You may only delete resaurants you have created.')
-#     return redirect(url_for('home', supplier_id = supplier_id))
-#   else:
-#     return render_template('deleteSupplier.html',supplier = supplierToDelete)
-
 #Show a supplier menu
 @app.route('/supplier/<int:supplier_id>/')
 @app.route('/supplier/<int:supplier_id>/menu/')
@@ -295,7 +278,6 @@ def showMenu(supplier_id):
     #   if supplierid == login_session['user_id']:
     #     return render_template('menu.html', meals = meals, supplier = supplier)
     return render_template('meals.html', meals = meals, supplier = supplier)
-
 
 
 #Create a new meal
@@ -312,6 +294,7 @@ def newMeal():
 	    return redirect(url_for('home'))
 	else:
 	    return render_template('newMeal.html', suppliers = suppliers)
+
 
 #Edit a meal
 @app.route('/supplier/<int:supplier_id>/menu/<int:meal_id>/edit', methods=['GET','POST'])
